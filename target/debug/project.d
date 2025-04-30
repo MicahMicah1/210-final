@@ -1,0 +1,1 @@
+/Users/micahrysman/Downloads/project/target/debug/project: /Users/micahrysman/Downloads/project/src/main.rs /Users/micahrysman/Downloads/project/src/readdata.rs /Users/micahrysman/Downloads/project/src/winpath.rs
