@@ -86,4 +86,64 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     Ok(())
 }
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use winpath::Graph;
+    #[test]
+    fn test_basic_graph() { // test a directed graph is constructed. 
+        let mut name_to_id = HashMap::new();
+        name_to_id.insert("a".to_string(), 0);
+        name_to_id.insert("b".to_string(), 1);
+        name_to_id.insert("c".to_string(), 2);
+
+        let mut id_to_name = HashMap::new();
+        id_to_name.insert(0, "A".to_string());
+        id_to_name.insert(1, "B".to_string());
+        id_to_name.insert(2, "C".to_string());
+
+        let edges = vec![(0, 1), (1, 2)];
+        let graph = Graph::create_directed(3, &edges);
+
+        assert_eq!(graph.outedges[0], vec![1]); // A -> B
+        assert_eq!(graph.outedges[1], vec![2]); // B -> C
+        assert_eq!(graph.outedges[2].len(), 0); // C -> no one
+    }
+    #[test]
+    fn test_name_to_id_mapping() { // test for name to ID
+        let mut name_to_id = HashMap::new();
+        name_to_id.insert("dustin poirier".to_string(), 0);
+        name_to_id.insert("conor mcgregor".to_string(), 1);
+
+        assert_eq!(name_to_id.get("dustin poirier"), Some(&0));
+        assert_eq!(name_to_id.get("conor mcgregor"), Some(&1));
+    }
+    #[test]
+    fn test_id_to_name_mapping() {  // test for Id to name 
+        let mut id_to_name = HashMap::new();
+        id_to_name.insert(0, "Dustin Poirier".to_string());
+        id_to_name.insert(1, "Conor McGregor".to_string());
+        
+        assert_eq!(id_to_name.get(&0), Some(&"Dustin Poirier".to_string()));
+        assert_eq!(id_to_name.get(&1), Some(&"Conor McGregor".to_string()));
+    }
+    #[test]
+    fn test_path_does_not_panic() { // Test to make sure my simple graph runs
+        let mut name_to_id = HashMap::new();
+        name_to_id.insert("dustin poirier".to_string(), 0);
+        name_to_id.insert("conor mcgregor".to_string(), 1);
+
+        let mut id_to_name = HashMap::new();
+        id_to_name.insert(0, "Dustin Poirier".to_string());
+        id_to_name.insert(1, "Conor McGregor".to_string());
+        let edges = vec![(0, 1)];
+        let graph = Graph::create_directed(2, &edges);
+        find_transitive_win_path(&graph, &name_to_id, &id_to_name, "Dustin Poirier", "Conor McGregor");
+    }
+
+        
+}
+
+
+
 
